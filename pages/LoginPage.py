@@ -5,29 +5,45 @@ from pages.BasePage import BasePage
 
 class LoginPageLocators:
     # Вкладки
-    LOGIN_TAB = (By.XPATH, "//a[@data-l='t,login_tab']")
-    QR_TAB = (By.XPATH, "//a[@data-l='t,qr_tab']")
+    LOGIN_TAB = (By.XPATH, "//div[@data-test-id='tab-login']")
+    QR_TAB = (By.XPATH, "//div[@data-test-id='tab-qr']")
 
     # Поля ввода
-    EMAIL_INPUT = (By.ID, "field_email")
-    PASSWORD_INPUT = (By.ID, "field_password")
-
-    # Кнопка показать/скрыть пароль
-    PASSWORD_VISIBILITY_BUTTON = (By.XPATH, "//button[.//span[contains(text(),'пароль')]]")
+    EMAIL_INPUT = (By.XPATH, "//input[@data-test-id='login-phone-email']")
+    PASSWORD_INPUT = (By.XPATH, "//input[@data-test-id='login-password']")
 
     # Кнопки
-    LOGIN_BUTTON = (By.XPATH, "//button[@data-test-id='enter-action']")
-    LOGIN_BY_QR_BUTTON = (By.XPATH, "//button[@label='Войти по QR-коду']")
-    REGISTER_BUTTON = (By.XPATH, "//button[@data-test-id='registration-action']")
+    LOGIN_BUTTON = (By.XPATH, "//button[@data-test-id='login-submit-btn']")
+    HERO_LOGIN_BUTTON = (By.XPATH, "//button[@data-test-id='hero-login-btn']")
+    REGISTER_BUTTON = (By.XPATH, "//button[@data-test-id='hero-register-btn']")
 
     # Ссылки
-    CANT_LOGIN_LINK = (By.XPATH, "//button[@data-test-id='forgot-password-link']")
+    CANT_LOGIN_LINK = (By.XPATH, "//a[@data-test-id='forgot-password-link']")
 
-    # Социальная авторизация
-    VK_LOGIN = (By.XPATH, "//a[@data-l='t,vkc']")
-    MAIL_LOGIN = (By.XPATH, "//a[@data-provider='MAILRU']")
-    YA_LOGIN = (By.XPATH, "//a[@data-provider='YANDEX']")
-
+    # Ошибки
+    ERROR_TEXT = (By.ID, "login-error")
 
 class LoginPageHelper(BasePage):
-    pass
+    def __init__(self, driver):
+        self.driver = driver
+        self.check_page()
+
+    def check_page(self):
+        self.find_element(LoginPageLocators.LOGIN_TAB)
+        self.find_element(LoginPageLocators.QR_TAB)
+        self.find_element(LoginPageLocators.EMAIL_INPUT)
+        self.find_element(LoginPageLocators.PASSWORD_INPUT)
+        self.find_element(LoginPageLocators.LOGIN_BUTTON)
+        self.find_element(LoginPageLocators.HERO_LOGIN_BUTTON)
+        self.find_element(LoginPageLocators.REGISTER_BUTTON)
+        self.find_element(LoginPageLocators.CANT_LOGIN_LINK)
+
+
+    def click_login(self):
+        self.find_element(LoginPageLocators.LOGIN_BUTTON).click()
+
+    def get_error_text(self):
+        return self.find_element(LoginPageLocators.ERROR_TEXT).text
+
+    def enter_login(self, login):
+        self.find_element(LoginPageLocators.EMAIL_INPUT).send_keys(login)

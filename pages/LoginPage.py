@@ -17,6 +17,10 @@ class LoginPageLocators:
     LOGIN_BUTTON = (By.XPATH, "//button[@data-test-id='login-submit-btn']")
     HERO_LOGIN_BUTTON = (By.XPATH, "//button[@data-test-id='hero-login-btn']")
     REGISTER_BUTTON = (By.XPATH, "//button[@data-test-id='hero-register-btn']")
+    CANCEL_BUTTON = (By.XPATH, "//button[@data-test-id='lockout-cancel-btn']")
+    RECOVERY_BUTTON = (By.XPATH, "//a[@data-test-id='lockout-recover-btn']")
+    REGISTER_LOCKOUT_BUTTON = (By.XPATH, "//button[@data-test-id='lockout-register-btn']")
+
 
     # Ссылки
     CANT_LOGIN_LINK = (By.XPATH, "//a[@data-test-id='forgot-password-link']")
@@ -30,6 +34,8 @@ class LoginPageHelper(BasePage):
         self.check_page()
 
     def check_page(self):
+        with allure.step('Проверяем корректность загрузки страницы'):
+            self.attach_screenshot()
         self.find_element(LoginPageLocators.LOGIN_TAB)
         self.find_element(LoginPageLocators.QR_TAB)
         self.find_element(LoginPageLocators.EMAIL_INPUT)
@@ -51,6 +57,18 @@ class LoginPageHelper(BasePage):
 
 
     @allure.step('Вводим логин')
-    def enter_login(self, login):
+    def type_login(self, login):
         self.find_element(LoginPageLocators.EMAIL_INPUT).send_keys(login)
         self.attach_screenshot()
+
+
+    @allure.step('Вводим пароль')
+    def type_password(self, password):
+        self.find_element(LoginPageLocators.PASSWORD_INPUT).send_keys(password)
+        self.attach_screenshot()
+
+
+    @allure.step('Нажимаем на кнопку "Восстановить"')
+    def click_recovery(self):
+        self.attach_screenshot()
+        self.find_element(LoginPageLocators.RECOVERY_BUTTON).click()
